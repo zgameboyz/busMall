@@ -100,11 +100,10 @@ function handleClick(e) {
 
   } else {
     leftImageTag.removeEventListener('click', handleClick);
-    renderResults();
     middleImageTag.removeEventListener('click', handleClick);
-    renderResults();
     rightImageTag.removeEventListener('click', handleClick);
     renderResults();
+    callChart();
   }
 
 }
@@ -144,13 +143,30 @@ console.log(rightPic);
 renderThreeItems(leftPic, centerPic, rightPic);
 
 var ctx = document.getElementById('chart').getContext('2d');
+
+
+
+var nameArray = [];
+var voteArray = [];
+
+
+console.log(voteArray);
+function callChart(){
+  for (let item of Product.allItems) {
+
+    nameArray.push(item.name);
+    voteArray.push(item.votes);
+    
+    
+  }
 var myChart = new Chart(ctx, {
+  
     type: 'bar',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: nameArray,
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: voteArray,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -178,3 +194,4 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+}
