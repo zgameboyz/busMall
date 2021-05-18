@@ -1,78 +1,59 @@
 'use strict';
 const resultsPannelUlElem = document.getElementById('itemClicks');
-// const itemImageSectionTag = document.getElementsByTagName('article');
-const leftImageTag = document.getElementById('pic1');
-const middleImageTag = document.getElementById('pic2');
-const rightImageTag = document.getElementById('pic3');
+
+const leftImageTag = document.getElementById('img1');
+const middleImageTag = document.getElementById('img2');
+const rightImageTag = document.getElementById('img3');
 const leftPicName = document.getElementById('picNameOne');
 const middlePicName = document.getElementById('picNameTwo');
 const rightPicName = document.getElementById('picNameThree');
 
 let voteCounter = 0;
 
-// come back to define current goats
+
 let leftPic = null;
 let centerPic = null;
 let rightPic = null;
 
-// goat constructor function
-// names, image
+
 function Product(name, imgPath) {
   this.name = name;
   this.imgPath = imgPath;
   this.votes = 0;
   this.timesShown = 0;
 
-  // you might not see this in production code depending on where you work but it is a handy way of getting every goat into the allGoat array every time you make one
   Product.allItems.push(this)
 }
 
-// let locations = [];
+
 Product.allItems = [];
 
-// make a method that renders one goat to the page
-// needs to know 'this'
-// needs to know where to render it h2 image tag
 Product.prototype.renderItem = function(name, imageTag) {
   imageTag.src = this.imgPath;
   name.textContent = this.name;
 }
 
-// make a global function that takes two goats and calls their render method - take two goats as arguments
 function renderThreeItems(leftImage, middleImage,rightImage) {
   leftImage.renderItem(leftPicName,leftImageTag );
-  middleImage.renderItem(middlePicName,middleImageTag)
+  middleImage.renderItem(middlePicName,middleImageTag);
   rightImage.renderItem(rightPicName,rightImageTag );
 
 }
 
-// // build this after the pick new goats function?
-// const renderNewGoats = function (leftIndex, rightIndex){
-//   // we render goats based off the random goat we picked
-//   leftGoatImageTag.src = GoatPicture.allImages[leftIndex].url;
-//   leftGoatH2Elem.textContent = GoatPicture.allImages[leftIndex].name;
-//   rightGoatImageTag.src = GoatPicture.allImages[rightIndex].url;
-//   rightGoatH2Elem.textContent = GoatPicture.allImages[rightIndex].name;
-// };
 
-// pick random goats
-// maybe want have those global vars that represent the current goats that we pick
-// write a function that picks one goat, and then another, making sure the first and the second goat are not the same
 function pickItems() {
   const leftImgIndex = Math.floor(Math.random() * Product.allItems.length);
 
   let middleImgIndex;
   let rightImgIndex;
   
-  while (middleImgIndex === undefined || middleImgIndex === leftImgIndex || middleImgIndex === rightImgIndex) {
+  while (middleImgIndex === undefined || middleImgIndex === leftImgIndex) {
     middleImgIndex = Math.floor(Math.random() * Product.allItems.length);
   }
   
   while (rightImgIndex === undefined || rightImgIndex === leftImgIndex || rightImgIndex === middleImgIndex) {
     rightImgIndex = Math.floor(Math.random() * Product.allItems.length);
   }
-
-  // lets assign the current left and current right goats based off the index numbers we got ^^^^
   leftPic = Product.allItems[leftImgIndex];
   centerPic = Product.allItems[middleImgIndex];
   rightPic = Product.allItems[rightImgIndex];
@@ -90,14 +71,14 @@ function renderResults() {
     resultsPannelUlElem.appendChild(liElm);
   }
 }
-// Clicker Function
+
 function handleClick(e) {
   console.log('Hello, I am Listening');
-  let thingTheyClickedOn = e.target.id;
+  let thingTheyClickedOn = e.target;
   console.log(thingTheyClickedOn, leftImageTag.children);
 
   if (voteCounter < 25) {
-    if (thingTheyClickedOn === leftImageTag.children[0].id || thingTheyClickedOn === middleImageTag.id || thingTheyClickedOn === rightImageTag.id) {
+    if (thingTheyClickedOn === leftImageTag || thingTheyClickedOn === middleImageTag || thingTheyClickedOn === rightImageTag) {
       voteCounter++;
       console.log("we made it")
      
@@ -107,7 +88,7 @@ function handleClick(e) {
       } else if (thingTheyClickedOn === middleImageTag) {
         centerPic.votes++;
      
-      } else if (thingTheyClickedOn === middleImageTag) {
+      } else if (thingTheyClickedOn === rightImageTag) {
         rightPic.votes++;
       }
 
@@ -161,3 +142,39 @@ console.log(leftPic);
 console.log(centerPic);
 console.log(rightPic);
 renderThreeItems(leftPic, centerPic, rightPic);
+
+var ctx = document.getElementById('chart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
