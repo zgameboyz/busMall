@@ -22,7 +22,7 @@ function Product(name, imgPath) {
   this.votes = 0;
   this.timesShown = 0;
 
-  Product.allItems.push(this)
+  Product.allItems.push(this);
 }
 
 
@@ -34,30 +34,55 @@ Product.prototype.renderItem = function(name, imageTag) {
 }
 
 function renderThreeItems(leftImage, middleImage,rightImage) {
-  leftImage.renderItem(leftPicName,leftImageTag );
+  leftImage.renderItem(leftPicName,leftImageTag);
   middleImage.renderItem(middlePicName,middleImageTag);
   rightImage.renderItem(rightPicName,rightImageTag );
 
 }
 
-
 function pickItems() {
-  const leftImgIndex = Math.floor(Math.random() * Product.allItems.length);
+  // // Prevents Repeat Images
+  const doNotUse = [];
+  doNotUse.push(leftPic);
+  doNotUse.push(centerPic);
+  doNotUse.push(rightPic); 
 
-  let middleImgIndex;
-  let rightImgIndex;
-  
-  while (middleImgIndex === undefined || middleImgIndex === leftImgIndex) {
-    middleImgIndex = Math.floor(Math.random() * Product.allItems.length);
+  while(doNotUse.includes(leftPic)) {
+    let leftIndex = Math.floor(Math.random() * Product.allItems.length);
+    leftPic = Product.allItems[leftIndex];
   }
-  
-  while (rightImgIndex === undefined || rightImgIndex === leftImgIndex || rightImgIndex === middleImgIndex) {
-    rightImgIndex = Math.floor(Math.random() * Product.allItems.length);
+
+  doNotUse.push(leftPic);
+
+  while(doNotUse.includes(rightPic)) {
+    let rightIndex = Math.floor(Math.random() * Product.allItems.length);
+    rightPic = Product.allItems[rightIndex];
+  } 
+
+  doNotUse.push(rightPic);
+
+  while(doNotUse.includes(centerPic)) {
+    let middleIndex = Math.floor(Math.random() * Product.allItems.length);
+    centerPic = Product.allItems[middleIndex];
   }
-  leftPic = Product.allItems[leftImgIndex];
-  centerPic = Product.allItems[middleImgIndex];
-  rightPic = Product.allItems[rightImgIndex];
 }
+// function pickItems() {
+//   const leftImgIndex = Math.floor(Math.random() * Product.allItems.length);
+
+//   let middleImgIndex;
+//   let rightImgIndex;
+  
+//   while (middleImgIndex === undefined || middleImgIndex === leftImgIndex) {
+//     middleImgIndex = Math.floor(Math.random() * Product.allItems.length);
+//   }
+  
+//   while (rightImgIndex === undefined || rightImgIndex === leftImgIndex || rightImgIndex === middleImgIndex) {
+//     rightImgIndex = Math.floor(Math.random() * Product.allItems.length);
+//   }
+//   leftPic = Product.allItems[leftImgIndex];
+//   centerPic = Product.allItems[middleImgIndex];
+//   rightPic = Product.allItems[rightImgIndex];
+// }
 
 function renderResults() {
   resultsPannelUlElem.innerHTML = '';
@@ -67,7 +92,7 @@ function renderResults() {
 
   for (let item of Product.allItems) {
     const liElm = document.createElement('li');
-    liElm.textContent = `${item.name} : ${item.votes}`;
+    liElm.textContent = `${item.name} : ${item.votes} vote(s) & shown ${item.timesShown} times `;
     resultsPannelUlElem.appendChild(liElm);
   }
 }
@@ -79,7 +104,8 @@ function handleClick(e) {
 
   if (voteCounter < 25) {
     if (thingTheyClickedOn === leftImageTag || thingTheyClickedOn === middleImageTag || thingTheyClickedOn === rightImageTag) {
-      voteCounter++;
+     
+      
       console.log("we made it")
      
       if (thingTheyClickedOn === leftImageTag) {
@@ -88,15 +114,18 @@ function handleClick(e) {
       } else if (thingTheyClickedOn === middleImageTag) {
         centerPic.votes++;
      
-      } else if (thingTheyClickedOn === rightImageTag) {
+      } else if(thingTheyClickedOn===rightImageTag){
         rightPic.votes++;
       }
-
+      leftPic.timesShown++;
+      centerPic.timesShown++;
+      rightPic.timesShown++;
+      voteCounter++;
+   storeLocalData();
       pickItems();
-      console.log(leftPic,centerPic,rightPic);
+      console.log(leftPic);
       renderThreeItems(leftPic, centerPic, rightPic);
-
-    }  
+    } 
 
   } else {
     leftImageTag.removeEventListener('click', handleClick);
@@ -107,13 +136,39 @@ function handleClick(e) {
   }
 
 }
+function storeLocalData (){
+  console.log(Product.allItems);
+  const stringifiedObjects = JSON.stringify(Product.allItems);
+  localStorage.setItem('products', stringifiedObjects);
+}
 
+function getLocalData(){
+  let productsFromStorage = localStorage.getItem('products');
+
+  if(productsFromStorage){
+    let parsedProducts = JSON.parse(productsFromStorage);
+  
+  for (let products of parsedProducts){
+
+    let myItem = new Product(products.name, products.imgPath);
+    myItem.votes = products.votes;
+    myItem.timesShown = products.timesShown;
+  }
+ 
+ 
+  }
+    else{
+      console.log(Product.allItems);
+      makeItem();
+    }
+  }
 // Event Listener
 leftImageTag.addEventListener('click', handleClick);
 middleImageTag.addEventListener('click', handleClick);
 rightImageTag.addEventListener('click', handleClick);
 
-// Calling the Items
+function makeItem(){ 
+  
 new Product('Starwars Bag', './imgs/bag.jpg');
 new Product('Banana Slicer', './imgs/banana.jpg');
 new Product('Toilet Tablet','./imgs/bathroom.jpg');
@@ -134,12 +189,15 @@ new Product('Unicorn Meat', './imgs/unicorn.jpg');
 new Product('Reverse Watering Can', './imgs/water-can.jpg');
 new Product('Wine Glass', './imgs/wine-glass.jpg');
 
+}  
+
+
+
 
 // Calling the Functions
+
+getLocalData();
 pickItems();
-console.log(leftPic);
-console.log(centerPic);
-console.log(rightPic);
 renderThreeItems(leftPic, centerPic, rightPic);
 
 var ctx = document.getElementById('chart').getContext('2d');
