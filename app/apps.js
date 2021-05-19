@@ -114,25 +114,25 @@ middleImageTag.addEventListener('click', handleClick);
 rightImageTag.addEventListener('click', handleClick);
 
 // Calling the Items
-new Product('Starwars Bag', '../imgs/bag.jpg');
-new Product('Banana Slicer', '../imgs/banana.jpg');
-new Product('Toilet Tablet','../imgs/bathroom.jpg');
-new Product('Boots','../imgs/boots.jpg');
-new Product('Breakfast Maker', '../imgs/breakfast.jpg');
-new Product('Meatball Bubble Gum', '../imgs/bubblegum.jpg');
-new Product('Camel Chair', '../imgs/chair.jpg');
-new Product('Cthulhu', '../imgs/cthulhu.jpg');
-new Product('Duck Muzzle', '../imgs/dog-duck.jpg');
-new Product('Dragon Meat', '../imgs/dragon.jpg');
-new Product('Utencil Pen', '../imgs/pen.jpg');
-new Product('Pet Mop', '../imgs/pet-sweep.jpg');
-new Product('Pizza Scissors', '../imgs/scissors.jpg');
-new Product('Shark Sleeping Bag', '../imgs/shark.jpg');
-new Product('Baby Mop', '../imgs/sweep.png');
-new Product('Goat Sleeping Bag', '../imgs/tauntaun.jpg');
-new Product('Unicorn Meat', '../imgs/unicorn.jpg');
-new Product('Reverse Watering Can', '../imgs/water-can.jpg');
-new Product('Wine Glass', '../imgs/wine-glass.jpg');
+new Product('Starwars Bag', './imgs/bag.jpg');
+new Product('Banana Slicer', './imgs/banana.jpg');
+new Product('Toilet Tablet','./imgs/bathroom.jpg');
+new Product('Boots','./imgs/boots.jpg');
+new Product('Breakfast Maker', './imgs/breakfast.jpg');
+new Product('Meatball Bubble Gum', './imgs/bubblegum.jpg');
+new Product('Camel Chair', './imgs/chair.jpg');
+new Product('Cthulhu', './imgs/cthulhu.jpg');
+new Product('Duck Muzzle', './imgs/dog-duck.jpg');
+new Product('Dragon Meat', './imgs/dragon.jpg');
+new Product('Utencil Pen', './imgs/pen.jpg');
+new Product('Pet Mop', './imgs/pet-sweep.jpg');
+new Product('Pizza Scissors', './imgs/scissors.jpg');
+new Product('Shark Sleeping Bag', './imgs/shark.jpg');
+new Product('Baby Mop', './imgs/sweep.png');
+new Product('Goat Sleeping Bag', './imgs/tauntaun.jpg');
+new Product('Unicorn Meat', './imgs/unicorn.jpg');
+new Product('Reverse Watering Can', './imgs/water-can.jpg');
+new Product('Wine Glass', './imgs/wine-glass.jpg');
 
 
 // Calling the Functions
